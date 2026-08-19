@@ -1,0 +1,20 @@
+# Ansible-installed collections (collections_path = ./.collections in ansible.cfg)
+/.collections/
+
+# Ansible runtime artifacts
+*.retry
+.ansible/
+fact_cache/
+
+# Vault / secrets — never commit
+*.vault
+.vault_pass
+vault_pass*.txt
+
+# Editor / OS cruft
+*.swp
+*.swo
+*~
+.DS_Store
+.idea/
+.vscode/

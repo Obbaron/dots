@@ -60,9 +60,9 @@ vim.opt.foldlevelstart = 99
 -- Whitespace display
 vim.opt.list = true
 vim.opt.listchars = {
-    tab = "Â» ",
-    trail = "Â·",
-    nbsp = "â£",
+    tab = "» ",
+    trail = "·",
+    nbsp = "␣",
 }
 
 -- Keymaps
