@@ -1,6 +1,46 @@
 ---
-# TODO: the Noctalia desktop shell/bar + its config. This is a shell, not a
-# compositor — it runs ON Hyprland (see meta dependency).
-- name: TODO — implement the noctalia role
-  ansible.builtin.debug:
-    msg: "role 'noctalia' is a placeholder; nothing applied yet"
+- name: Install Noctalia
+  ansible.builtin.package:
+    name: noctalia
+    state: present
+  become: true
+
+# --- greetd: this role owns the greeter config + enablement (keeps the wayland
+#     substrate free of any shell/compositor reference) ---
+- name: Install the greetd config (Noctalia greeter -> Hyprland session)
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/greetd-config.toml"
+    dest: /etc/greetd/config.toml
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: Enable greetd
+  ansible.builtin.systemd:
+    name: greetd
+    enabled: true
+    # NOTE: intentionally NOT starting/restarting — greetd owns the active login
+    # session; a restart here would kill it. Enable only; it starts on next boot.
+  become: true
+
+# --- settings: seed the GUI config on a fresh box, never clobber the live one ---
+- name: Check whether a seed settings.toml is shipped in the repo
+  ansible.builtin.stat:
+    path: "{{ role_path }}/files/settings.toml"
+  register: noctalia_seed
+
+- name: Ensure the Noctalia state dir exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.local/state/noctalia"
+    state: directory
+    mode: "0755"
+  when: noctalia_seed.stat.exists
+
+- name: Seed Noctalia settings (only if shipped and not already present)
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/settings.toml"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.local/state/noctalia/settings.toml"
+    force: false          # never overwrite Noctalia's live settings
+    mode: "0644"
+  when: noctalia_seed.stat.exists

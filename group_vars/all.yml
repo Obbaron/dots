@@ -5,9 +5,9 @@
 # profile's list is incomplete. The list expresses COMPOSITION; meta enforces
 # REQUIREMENTS.
 #
-# Built for real: base, cli, shell, neovim, ssh, terminal, nerdfonts, wayland, devtools, firewall.
+# Built for real: base, cli, shell, neovim, ssh, terminal, nerdfonts, wayland, hyprland, noctalia, devtools, firewall.
 # Placeholders (apply as no-ops until fleshed out): x11,
-# hyprland, noctalia, media, gaming, laptop.
+# media, gaming, laptop.
 profiles:
   minimal: [base, cli, shell, neovim]
   server:  [base, cli, shell, neovim, ssh, terminal, nerdfonts, devtools, firewall]

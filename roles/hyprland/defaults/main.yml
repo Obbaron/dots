@@ -1,0 +1,20 @@
+---
+hyprland_config_dir: "{{ ansible_facts['env']['HOME'] }}/.config/hypr"
+
+# Hand-written Lua modules, linked from the repo into ~/.config/hypr/.
+# noctalia.lua is DELIBERATELY excluded: Noctalia generates it at runtime, so it
+# stays a real file Noctalia owns — keeping the repo out of its way (and out of
+# git churn). hyprland.lua's require("noctalia") is the last line, so if that
+# file is absent the compositor and all binds still load; only theming is skipped.
+hyprland_link_files:
+  - hyprland.lua
+  - env.lua
+  - settings.lua
+  - devices.lua
+  - keybinds.lua
+  - hover_close.lua
+  - monitors.lua
+  - animations.lua
+  - rules.lua
+  - autostart.lua
+  - vars.lua

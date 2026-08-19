@@ -1,9 +1,68 @@
 ---
-# TODO: the SHARED compositor layer — Hyprland + common ecosystem
-# (xdg-desktop-portal-hyprland, lock/idle daemon, hyprpaper). Ship a shared
-# hyprland.conf that `source=`s a per-host fragment selected by hostname:
-#   roles/hyprland/files/hosts/{{ inventory_hostname }}.conf
-# so monitor/keybind/GPU specifics stay per-machine over a shared base.
-- name: TODO — implement the hyprland role
-  ansible.builtin.debug:
-    msg: "role 'hyprland' is a placeholder; nothing applied yet"
+- name: Load distro-specific package names (most specific wins)
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/vars/{{ ansible_facts['distribution'] }}.yml"
+    - "{{ role_path }}/vars/{{ ansible_facts['os_family'] }}.yml"
+    - "{{ role_path }}/vars/default.yml"
+
+- name: Install Hyprland and its portal
+  ansible.builtin.package:
+    name: "{{ hyprland_packages }}"
+    state: present
+  become: true
+
+- name: Ensure ~/.config/hypr exists
+  ansible.builtin.file:
+    path: "{{ hyprland_config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Stat each Hyprland config destination
+  ansible.builtin.stat:
+    path: "{{ hyprland_config_dir }}/{{ item }}"
+    follow: false
+  loop: "{{ hyprland_link_files }}"
+  register: hypr_dest
+
+- name: Stat the .bak target for any pre-existing real file
+  ansible.builtin.stat:
+    path: "{{ hyprland_config_dir }}/{{ item.item }}.bak"
+    follow: false
+  loop: "{{ hypr_dest.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists and not item.stat.islnk
+  register: hypr_bak
+
+- name: Refuse to clobber an existing .bak
+  ansible.builtin.assert:
+    that:
+      - not item.stat.exists
+    fail_msg: >-
+      {{ hyprland_config_dir }}/{{ item.item }} is a real file and its .bak
+      already exists — resolve it manually so nothing is silently destroyed.
+    quiet: true
+  loop: "{{ hypr_bak.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: not (item.skipped | default(false))
+
+- name: Back up a pre-existing real file to <file>.bak
+  ansible.builtin.command:
+    cmd: >-
+      mv -- "{{ hyprland_config_dir }}/{{ item.item }}"
+            "{{ hyprland_config_dir }}/{{ item.item }}.bak"
+  loop: "{{ hypr_dest.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists and not item.stat.islnk
+  changed_when: true
+
+- name: Link Hyprland config files into ~/.config/hypr
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/hypr/{{ item }}"
+    dest: "{{ hyprland_config_dir }}/{{ item }}"
+    state: link
+    force: true
+  loop: "{{ hyprland_link_files }}"
