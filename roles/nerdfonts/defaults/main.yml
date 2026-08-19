@@ -1,0 +1,18 @@
+---
+# Nerd Font families to install. Override per host/group, e.g. in
+# host_vars/optiplex.yml:  nerd_fonts: [JetBrainsMono, CascadiaCode]
+nerd_fonts:
+  - JetBrainsMono
+
+# Pin the Nerd Fonts release (or "latest"). This is your font-version pinning,
+# the analogue of REF for the repo.
+nerd_fonts_version: "v3.4.0"
+
+# Computed release base URL (leave as-is).
+nerd_fonts_base_url: >-
+  {{ 'https://github.com/ryanoasis/nerd-fonts/releases/latest/download'
+     if nerd_fonts_version == 'latest'
+     else 'https://github.com/ryanoasis/nerd-fonts/releases/download/' ~ nerd_fonts_version }}
+
+# Where fonts land (per-user, no sudo).
+nerd_fonts_dir: "{{ ansible_env.HOME }}/.local/share/fonts"

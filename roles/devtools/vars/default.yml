@@ -1,0 +1,10 @@
+---
+# Build/task tooling plus the LSP servers the neovim config guards on.
+# The neovim role checks `pyright-langserver` and `ruff` at runtime; the
+# package names below provide those binaries.
+devtools_packages:
+  - direnv
+  - just
+  - make
+  - pyright
+  - ruff

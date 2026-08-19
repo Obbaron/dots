@@ -1,0 +1,10 @@
+---
+# Collections the roles depend on. Installed once per machine:
+#   ansible-galaxy collection install -r requirements.yml
+collections:
+  # package backends for pacman/zypper/apk/xbps/portage
+  - name: community.general
+    version: ">=8.0.0"
+  # authorized_key module (ssh role)
+  - name: ansible.posix
+    version: ">=1.5.0"

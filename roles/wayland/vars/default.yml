@@ -1,0 +1,22 @@
+---
+# The thin Wayland substrate: everything a session needs BEFORE a compositor.
+# Deliberately EXCLUDES compositor-specific pieces (portal impl, idle/lock,
+# wallpaper) and shell pieces (bar, launcher, notifications) — those live in the
+# hyprland and noctalia roles.
+#
+# greetd here is the DAEMON only; its config + `systemctl enable` live in the
+# noctalia role, since the greeter is Noctalia's.
+wayland_packages:
+  - greetd
+  - wayland
+  - xorg-xwayland          # X11 apps under any Wayland compositor
+  - xdg-desktop-portal     # base portal; the -hyprland impl is in the hyprland role
+  - xdg-desktop-portal-gtk # generic fallback
+  - pipewire
+  - wireplumber
+  - pipewire-pulse
+  - pipewire-alsa
+  - polkit                 # daemon; the agent autostart is the compositor's job
+  - wl-clipboard
+  - xdg-user-dirs
+  - kitty                  # default terminal

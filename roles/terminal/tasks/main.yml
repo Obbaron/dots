@@ -1,0 +1,41 @@
+---
+- name: Load distro-specific package names (most specific wins)
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/vars/{{ ansible_facts['distribution'] }}.yml"
+    - "{{ role_path }}/vars/{{ ansible_facts['os_family'] }}.yml"
+    - "{{ role_path }}/vars/default.yml"
+
+- name: Install interactive terminal extras
+  ansible.builtin.package:
+    name: "{{ terminal_packages }}"
+    state: present
+  become: true
+
+# starship: installed from the official script rather than a package.
+- name: Detect an existing starship
+  ansible.builtin.shell: command -v starship
+  register: starship_present
+  changed_when: false
+  failed_when: false
+
+- name: Install starship from the official script
+  when: starship_present.rc != 0
+  vars:
+    starship_installer: /tmp/starship-install.sh
+  block:
+    - name: Download the starship installer
+      ansible.builtin.get_url:
+        url: https://starship.rs/install.sh
+        dest: "{{ starship_installer }}"
+        mode: "0755"
+
+    - name: Run the installer into ~/.local/bin (no sudo)
+      ansible.builtin.command:
+        cmd: "{{ starship_installer }} --yes --bin-dir {{ ansible_env.HOME }}/.local/bin"
+        creates: "{{ ansible_env.HOME }}/.local/bin/starship"
+
+    - name: Remove the installer
+      ansible.builtin.file:
+        path: "{{ starship_installer }}"
+        state: absent

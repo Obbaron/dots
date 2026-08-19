@@ -1,0 +1,17 @@
+---
+# Profiles are explicit role lists (Option A). Hard "can't function without"
+# edges are enforced separately via each role's meta/main.yml dependencies
+# (e.g. noctalia -> hyprland -> wayland), so those run in the right order even if a
+# profile's list is incomplete. The list expresses COMPOSITION; meta enforces
+# REQUIREMENTS.
+#
+# Built for real: base, cli, shell, neovim, ssh, terminal, nerdfonts, wayland, devtools, firewall.
+# Placeholders (apply as no-ops until fleshed out): x11,
+# hyprland, noctalia, media, gaming, laptop.
+profiles:
+  minimal: [base, cli, shell, neovim]
+  server:  [base, cli, shell, neovim, ssh, terminal, nerdfonts, devtools, firewall]
+  desktop: [base, cli, shell, neovim, ssh, terminal, wayland, nerdfonts, devtools]
+  gaming:  [base, cli, shell, neovim, ssh, terminal, wayland, nerdfonts, devtools, gaming]
+  htpc:    [base, cli, shell, neovim, ssh, terminal, wayland, nerdfonts, hyprland, noctalia, media]
+  laptop:  [base, cli, shell, neovim, ssh, terminal, wayland, nerdfonts, devtools, laptop]

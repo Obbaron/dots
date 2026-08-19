@@ -1,0 +1,10 @@
+---
+# Each entry is linked  roles/shell/files/<path>  ->  ~/<path>.
+# Parent dirs must already exist (~/.bashrc.d comes from the base dependency).
+shell_link_files:
+  - .bashrc
+  - .bash_profile
+  - .vimrc
+  - .bashrc.d/00-env.sh
+  - .bashrc.d/aliases.sh
+  - .bashrc.d/functions.sh

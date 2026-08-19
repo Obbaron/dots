@@ -1,0 +1,10 @@
+---
+# NOTE: pyright is not reliably packaged on the RedHat family. Install it out of
+# band (npm i -g pyright, or pipx) or via a dedicated task; it's omitted here so
+# a Fedora/RHEL run doesn't hard-fail on an unresolvable name. ruff and just are
+# available via COPR/EPEL on most setups.
+devtools_packages:
+  - direnv
+  - just
+  - make
+  - ruff

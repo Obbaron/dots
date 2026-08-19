@@ -1,0 +1,5 @@
+---
+# Hard edge: Hyprland needs the Wayland substrate beneath it. Ansible runs
+# `wayland` before this role even if a profile forgets to list it.
+dependencies:
+  - role: wayland

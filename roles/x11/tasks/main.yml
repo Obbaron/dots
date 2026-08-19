@@ -1,0 +1,8 @@
+---
+# Placeholder: the X11 session substrate, parallel to the wayland role, for the
+# devices where you run X instead of Wayland. Flesh out with xorg-server, xinit,
+# a display manager (or startx), etc. Not in any profile yet — add it where a
+# machine needs X, likely via host_vars or a dedicated profile.
+- name: TODO — implement the x11 role
+  ansible.builtin.debug:
+    msg: "role 'x11' is a placeholder; nothing applied yet"

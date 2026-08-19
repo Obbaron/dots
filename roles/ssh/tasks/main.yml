@@ -1,0 +1,31 @@
+---
+- name: Load distro-specific openssh names
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/vars/{{ ansible_facts['os_family'] }}.yml"
+    - "{{ role_path }}/vars/default.yml"
+
+- name: Authorize SSH public keys for this user
+  ansible.posix.authorized_key:
+    user: "{{ ansible_user_id }}"
+    key: "{{ item }}"
+    state: present
+    exclusive: "{{ ssh_exclusive | bool }}"
+  loop: "{{ ssh_authorized_keys }}"
+  when: ssh_authorized_keys | length > 0
+
+- name: Manage the SSH server
+  when: ssh_manage_server | bool
+  block:
+    - name: Install the OpenSSH server
+      ansible.builtin.package:
+        name: "{{ ssh_server_package }}"
+        state: present
+      become: true
+
+    - name: Enable and start sshd
+      ansible.builtin.systemd:
+        name: "{{ ssh_server_service }}"
+        enabled: true
+        state: started
+      become: true

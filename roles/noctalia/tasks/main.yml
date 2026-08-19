@@ -1,0 +1,6 @@
+---
+# TODO: the Noctalia desktop shell/bar + its config. This is a shell, not a
+# compositor — it runs ON Hyprland (see meta dependency).
+- name: TODO — implement the noctalia role
+  ansible.builtin.debug:
+    msg: "role 'noctalia' is a placeholder; nothing applied yet"

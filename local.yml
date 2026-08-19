@@ -1,0 +1,24 @@
+---
+# ansible-pull's default entry playbook. Connection is local; ansible-pull
+# limits the run to the current host, so `hosts: all` resolves to just this box.
+- name: Configure this machine
+  hosts: all
+  gather_facts: true          # needed for ansible_facts['distribution'] / os_family
+
+  pre_tasks:
+    - name: Fail loudly if this host has no valid profile
+      ansible.builtin.assert:
+        that:
+          - profile is defined
+          - profile in profiles
+        fail_msg: >-
+          No valid 'profile' for {{ inventory_hostname }}. Define it in
+          host_vars/{{ inventory_hostname }}.yml as one of:
+          {{ profiles.keys() | list | join(', ') }}.
+        quiet: true
+
+  tasks:
+    - name: Apply the roles for the selected profile
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      loop: "{{ profiles[profile] }}"

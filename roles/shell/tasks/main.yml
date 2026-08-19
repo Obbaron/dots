@@ -1,0 +1,51 @@
+---
+- name: Stat each link destination
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    follow: false
+  loop: "{{ shell_link_files }}"
+  register: shell_dest
+
+- name: Stat the .bak target for any pre-existing real file
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/{{ item.item }}.bak"
+    follow: false
+  loop: "{{ shell_dest.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists and not item.stat.islnk
+  register: shell_bak
+
+# Refuse BEFORE moving anything, so two versions are never lost.
+- name: Refuse to clobber an existing .bak
+  ansible.builtin.assert:
+    that:
+      - not item.stat.exists
+    fail_msg: >-
+      {{ ansible_env.HOME }}/{{ item.item }} is a real file and
+      {{ ansible_env.HOME }}/{{ item.item }}.bak already exists — resolve it
+      manually so nothing is silently destroyed.
+    quiet: true
+  loop: "{{ shell_bak.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: not (item.skipped | default(false))
+
+- name: Back up a pre-existing real file to <file>.bak
+  ansible.builtin.command:
+    cmd: >-
+      mv -- "{{ ansible_env.HOME }}/{{ item.item }}"
+            "{{ ansible_env.HOME }}/{{ item.item }}.bak"
+  loop: "{{ shell_dest.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists and not item.stat.islnk
+  changed_when: true
+
+- name: Link shell config into $HOME
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/{{ item }}"
+    state: link
+    force: true
+  loop: "{{ shell_link_files }}"

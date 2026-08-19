@@ -1,0 +1,5 @@
+---
+# Hard edge: neovim links ~/.config/nvim, whose parent ~/.config is created
+# by the base role. Declared so base always runs first.
+dependencies:
+  - role: base

@@ -1,0 +1,6 @@
+---
+# Placeholder role. Applying it is currently a no-op — replace this with real
+# tasks (packages, links, services, …) when you build the gaming slice.
+- name: TODO — implement the gaming role
+  ansible.builtin.debug:
+    msg: "role 'gaming' is a placeholder; nothing applied yet"

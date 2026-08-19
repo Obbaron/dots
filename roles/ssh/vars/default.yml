@@ -1,0 +1,4 @@
+---
+# Arch and most others: server ships in `openssh`, unit is `sshd`.
+ssh_server_package: openssh
+ssh_server_service: sshd

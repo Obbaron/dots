@@ -1,0 +1,5 @@
+---
+# TEMPORARY: start the HTPC on the minimal profile during bring-up.
+# host_vars beats group_vars, so this wins over the htpc group's `profile`.
+# Delete this line when ready and optiplex inherits `profile: htpc`.
+profile: minimal

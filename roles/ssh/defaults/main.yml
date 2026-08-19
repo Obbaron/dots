@@ -1,0 +1,16 @@
+---
+# PUBLIC keys allowed to log in as this user. Public keys are safe to commit,
+# even in a public repo. Replace the empty list with one entry per key:
+#
+#   ssh_authorized_keys:
+#     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5... you@laptop"
+#
+ssh_authorized_keys: []
+
+# Manage the SSH server itself (install openssh + enable sshd). Set false on a
+# box that should carry your authorized_keys but not run a listening server.
+ssh_manage_server: true
+
+# true  = only the keys above may log in (removes any others)
+# false = append these keys, leave existing entries alone
+ssh_exclusive: false

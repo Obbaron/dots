@@ -1,0 +1,9 @@
+---
+# TODO: the SHARED compositor layer — Hyprland + common ecosystem
+# (xdg-desktop-portal-hyprland, lock/idle daemon, hyprpaper). Ship a shared
+# hyprland.conf that `source=`s a per-host fragment selected by hostname:
+#   roles/hyprland/files/hosts/{{ inventory_hostname }}.conf
+# so monitor/keybind/GPU specifics stay per-machine over a shared base.
+- name: TODO — implement the hyprland role
+  ansible.builtin.debug:
+    msg: "role 'hyprland' is a placeholder; nothing applied yet"

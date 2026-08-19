@@ -1,0 +1,26 @@
+---
+# ufw defaults to ALLOW incoming, so default-deny must be set explicitly.
+- name: Install ufw
+  ansible.builtin.package:
+    name: ufw
+    state: present
+  become: true
+
+- name: Enable and start ufw
+  ansible.builtin.systemd:
+    name: ufw
+    enabled: true
+    state: started
+  become: true
+
+- name: Read current ufw status
+  ansible.builtin.command: ufw status verbose
+  register: ufw_status
+  changed_when: false
+  check_mode: false          # still run under --check so the guard is accurate
+  become: true
+
+- name: Set default-deny for incoming traffic
+  ansible.builtin.command: ufw default deny incoming
+  when: "'deny (incoming)' not in ufw_status.stdout"
+  become: true

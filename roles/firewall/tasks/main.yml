@@ -1,0 +1,27 @@
+---
+# Dispatcher. The firewall backend defaults from the distro family
+# (Archlinux -> ufw, RedHat -> firewalld) but can be overridden per host by
+# setting `firewall_backend` in host_vars. Each backend's logic lives in its own
+# task file so the two very different models stay explicit and readable.
+- name: Select the firewall backend
+  ansible.builtin.set_fact:
+    firewall_backend: >-
+      {{ firewall_backend
+         | default(firewall_default_backend[ansible_facts['os_family']]
+                   | default('unsupported')) }}
+  vars:
+    firewall_default_backend:
+      Archlinux: ufw
+      RedHat: firewalld
+
+- name: Fail if no firewall backend fits this host
+  ansible.builtin.assert:
+    that:
+      - firewall_backend in ['ufw', 'firewalld']
+    fail_msg: >-
+      No firewall backend for os_family={{ ansible_facts['os_family'] }}.
+      Set firewall_backend (ufw|firewalld) in host_vars to choose one.
+    quiet: true
+
+- name: "Apply the {{ firewall_backend }} backend"
+  ansible.builtin.include_tasks: "{{ firewall_backend }}.yml"

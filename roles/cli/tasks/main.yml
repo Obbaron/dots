@@ -1,0 +1,14 @@
+---
+- name: Load distro-specific package names (most specific wins)
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/vars/{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_major_version'] }}.yml"
+    - "{{ role_path }}/vars/{{ ansible_facts['distribution'] }}.yml"
+    - "{{ role_path }}/vars/{{ ansible_facts['os_family'] }}.yml"
+    - "{{ role_path }}/vars/default.yml"
+
+- name: Install CLI tools
+  ansible.builtin.package:
+    name: "{{ cli_packages }}"
+    state: present
+  become: true

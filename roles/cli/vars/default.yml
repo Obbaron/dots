@@ -1,0 +1,11 @@
+---
+# Bare core: tools you want on ANY box, including headless. These package names
+# are identical across apt/dnf/pacman, so no per-distro override files are
+# needed — the first_found cascade simply falls through to this default.
+cli_packages:
+  - fzf
+  - neovim
+  - ripgrep
+  - tree
+  - which
+  - curl

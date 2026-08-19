@@ -1,0 +1,54 @@
+---
+- name: Ensure unzip is available (needed to extract font archives)
+  ansible.builtin.package:
+    name: unzip
+    state: present
+  become: true
+
+- name: Ensure the fonts directory exists
+  ansible.builtin.file:
+    path: "{{ nerd_fonts_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Check which Nerd Fonts are already installed
+  ansible.builtin.stat:
+    path: "{{ nerd_fonts_dir }}/{{ item }}"
+  loop: "{{ nerd_fonts }}"
+  loop_control:
+    label: "{{ item }}"
+  register: nerd_font_stats
+
+- name: Create directories for missing fonts
+  ansible.builtin.file:
+    path: "{{ nerd_fonts_dir }}/{{ item.item }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ nerd_font_stats.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: not item.stat.exists
+
+- name: Download and extract missing Nerd Fonts
+  ansible.builtin.unarchive:
+    src: "{{ nerd_fonts_base_url }}/{{ item.item }}.zip"
+    dest: "{{ nerd_fonts_dir }}/{{ item.item }}"
+    remote_src: true
+  loop: "{{ nerd_font_stats.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: not item.stat.exists
+  register: nerd_font_install
+
+- name: Look for fc-cache (absent on headless boxes)
+  ansible.builtin.shell: command -v fc-cache
+  register: fc_cache_bin
+  changed_when: false
+  failed_when: false
+
+- name: Rebuild the font cache
+  ansible.builtin.command: fc-cache -f
+  when:
+    - nerd_font_install is changed
+    - fc_cache_bin.rc == 0
+  changed_when: true

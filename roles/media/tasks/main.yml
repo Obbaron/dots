@@ -1,0 +1,6 @@
+---
+# Placeholder role. Applying it is currently a no-op — replace this with real
+# tasks (packages, links, services, …) when you build the media slice.
+- name: TODO — implement the media role
+  ansible.builtin.debug:
+    msg: "role 'media' is a placeholder; nothing applied yet"
