@@ -32,8 +32,8 @@
 
     - name: Run the installer into ~/.local/bin (no sudo)
       ansible.builtin.command:
-        cmd: "{{ starship_installer }} --yes --bin-dir {{ ansible_env.HOME }}/.local/bin"
-        creates: "{{ ansible_env.HOME }}/.local/bin/starship"
+        cmd: "{{ starship_installer }} --yes --bin-dir {{ ansible_facts['env']['HOME'] }}/.local/bin"
+        creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/starship"
 
     - name: Remove the installer
       ansible.builtin.file:

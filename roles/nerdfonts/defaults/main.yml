@@ -15,4 +15,4 @@ nerd_fonts_base_url: >-
      else 'https://github.com/ryanoasis/nerd-fonts/releases/download/' ~ nerd_fonts_version }}
 
 # Where fonts land (per-user, no sudo).
-nerd_fonts_dir: "{{ ansible_env.HOME }}/.local/share/fonts"
+nerd_fonts_dir: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts"

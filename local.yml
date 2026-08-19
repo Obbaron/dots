@@ -20,5 +20,7 @@
   tasks:
     - name: Apply the roles for the selected profile
       ansible.builtin.include_role:
-        name: "{{ item }}"
+        name: "{{ role_name }}"
       loop: "{{ profiles[profile] }}"
+      loop_control:
+        loop_var: role_name

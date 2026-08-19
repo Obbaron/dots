@@ -1,14 +1,14 @@
 ---
 - name: Stat each link destination
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
+    path: "{{ ansible_facts['env']['HOME'] }}/{{ item }}"
     follow: false
   loop: "{{ shell_link_files }}"
   register: shell_dest
 
 - name: Stat the .bak target for any pre-existing real file
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/{{ item.item }}.bak"
+    path: "{{ ansible_facts['env']['HOME'] }}/{{ item.item }}.bak"
     follow: false
   loop: "{{ shell_dest.results }}"
   loop_control:
@@ -22,8 +22,8 @@
     that:
       - not item.stat.exists
     fail_msg: >-
-      {{ ansible_env.HOME }}/{{ item.item }} is a real file and
-      {{ ansible_env.HOME }}/{{ item.item }}.bak already exists — resolve it
+      {{ ansible_facts['env']['HOME'] }}/{{ item.item }} is a real file and
+      {{ ansible_facts['env']['HOME'] }}/{{ item.item }}.bak already exists — resolve it
       manually so nothing is silently destroyed.
     quiet: true
   loop: "{{ shell_bak.results }}"
@@ -34,8 +34,8 @@
 - name: Back up a pre-existing real file to <file>.bak
   ansible.builtin.command:
     cmd: >-
-      mv -- "{{ ansible_env.HOME }}/{{ item.item }}"
-            "{{ ansible_env.HOME }}/{{ item.item }}.bak"
+      mv -- "{{ ansible_facts['env']['HOME'] }}/{{ item.item }}"
+            "{{ ansible_facts['env']['HOME'] }}/{{ item.item }}.bak"
   loop: "{{ shell_dest.results }}"
   loop_control:
     label: "{{ item.item }}"
@@ -45,7 +45,7 @@
 - name: Link shell config into $HOME
   ansible.builtin.file:
     src: "{{ role_path }}/files/{{ item }}"
-    dest: "{{ ansible_env.HOME }}/{{ item }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/{{ item }}"
     state: link
     force: true
   loop: "{{ shell_link_files }}"

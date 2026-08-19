@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
-    mode: "{{ item.mode | default('0755') }}"
+    mode: "{{ item.mode | default(omit) }}"
   loop: "{{ base_directories }}"
   loop_control:
     label: "{{ item.path }}"

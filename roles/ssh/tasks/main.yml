@@ -7,7 +7,7 @@
 
 - name: Authorize SSH public keys for this user
   ansible.posix.authorized_key:
-    user: "{{ ansible_user_id }}"
+    user: "{{ ansible_facts['user_id'] }}"
     key: "{{ item }}"
     state: present
     exclusive: "{{ ssh_exclusive | bool }}"

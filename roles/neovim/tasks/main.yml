@@ -6,13 +6,13 @@
 
 - name: Stat ~/.config/nvim
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.config/nvim"
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/nvim"
     follow: false
   register: nvim_dest
 
 - name: Stat the .bak target for a pre-existing real config
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.config/nvim.bak"
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/nvim.bak"
     follow: false
   when: nvim_dest.stat.exists and not nvim_dest.stat.islnk
   register: nvim_bak
@@ -22,8 +22,8 @@
     that:
       - not nvim_bak.stat.exists
     fail_msg: >-
-      {{ ansible_env.HOME }}/.config/nvim is a real directory and
-      {{ ansible_env.HOME }}/.config/nvim.bak already exists — resolve it
+      {{ ansible_facts['env']['HOME'] }}/.config/nvim is a real directory and
+      {{ ansible_facts['env']['HOME'] }}/.config/nvim.bak already exists — resolve it
       manually so nothing is silently destroyed.
     quiet: true
   when: nvim_dest.stat.exists and not nvim_dest.stat.islnk
@@ -31,14 +31,14 @@
 - name: Back up a pre-existing real ~/.config/nvim to .bak
   ansible.builtin.command:
     cmd: >-
-      mv -- "{{ ansible_env.HOME }}/.config/nvim"
-            "{{ ansible_env.HOME }}/.config/nvim.bak"
+      mv -- "{{ ansible_facts['env']['HOME'] }}/.config/nvim"
+            "{{ ansible_facts['env']['HOME'] }}/.config/nvim.bak"
   when: nvim_dest.stat.exists and not nvim_dest.stat.islnk
   changed_when: true
 
 - name: Link ~/.config/nvim -> repo config
   ansible.builtin.file:
     src: "{{ role_path }}/files/nvim"
-    dest: "{{ ansible_env.HOME }}/.config/nvim"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.config/nvim"
     state: link
     force: true

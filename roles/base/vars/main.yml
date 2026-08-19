@@ -1,7 +1,7 @@
 ---
 # Modes are quoted strings so YAML doesn't reinterpret the octal.
 base_directories:
-  - { path: "{{ ansible_env.HOME }}/.bashrc.d" }
-  - { path: "{{ ansible_env.HOME }}/.local/bin" }
-  - { path: "{{ ansible_env.HOME }}/.config" }
-  - { path: "{{ ansible_env.HOME }}/.ssh", mode: "0700" }
+  - { path: "{{ ansible_facts['env']['HOME'] }}/.bashrc.d" }
+  - { path: "{{ ansible_facts['env']['HOME'] }}/.local/bin" }
+  - { path: "{{ ansible_facts['env']['HOME'] }}/.config" }
+  - { path: "{{ ansible_facts['env']['HOME'] }}/.ssh", mode: "0700" }
