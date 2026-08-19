@@ -37,6 +37,7 @@ else
   alias l.="ls -A | grep '^\.'"
 fi
 
+alias lg='lazygit'
 alias b='btop'
 alias ff='fastfetch'
 alias c='clear'
