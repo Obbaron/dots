@@ -1,18 +1,10 @@
-# One entry per machine; the name MUST equal the box's real hostname so that
-# ansible-pull's per-host limit and group/host vars line up.
-#
-# Each host belongs to exactly ONE function group, and each function group owns
-# exactly one profile (see group_vars/<group>.yml).
-
 [all:vars]
-# pull model: every box configures itself (comment MUST be on its own line —
-# INI inventory does not strip trailing inline comments from values)
 ansible_connection = local
 
-[workstations]
+[gaming]
 bigboi
 
-[servers]
+[server]
 arbiter
 
 [htpc]

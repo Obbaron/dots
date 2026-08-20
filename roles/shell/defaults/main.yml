@@ -1,6 +1,4 @@
 ---
-# Each entry is linked  roles/shell/files/<path>  ->  ~/<path>.
-# Parent dirs must already exist (~/.bashrc.d comes from the base dependency).
 shell_link_files:
   - .bashrc
   - .bash_profile

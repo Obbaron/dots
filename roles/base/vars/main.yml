@@ -1,5 +1,4 @@
 ---
-# Modes are quoted strings so YAML doesn't reinterpret the octal.
 base_directories:
   - { path: "{{ ansible_facts['env']['HOME'] }}/.bashrc.d" }
   - { path: "{{ ansible_facts['env']['HOME'] }}/.local/bin" }

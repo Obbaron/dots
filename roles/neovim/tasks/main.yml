@@ -1,9 +1,4 @@
 ---
-# The neovim config is a whole directory (~/.config/nvim), symlinked to the repo
-# copy. Same .bak safety as the shell role, but for a directory: a pre-existing
-# real config dir is moved aside before linking, and the run refuses rather than
-# overwrite an existing .bak.
-
 - name: Stat ~/.config/nvim
   ansible.builtin.stat:
     path: "{{ ansible_facts['env']['HOME'] }}/.config/nvim"

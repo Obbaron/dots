@@ -1,5 +1,3 @@
 ---
-# Hard edge: bash links files into ~/.bashrc.d, which the `base` role creates.
-# Declared here so base always runs first, even from a profile that omits it.
 dependencies:
   - role: base

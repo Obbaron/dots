@@ -1,4 +1,3 @@
 ---
-# Hard edge: authorized_keys lives in ~/.ssh, created (mode 700) by base.
 dependencies:
   - role: base

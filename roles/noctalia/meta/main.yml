@@ -1,4 +1,3 @@
 ---
-# Hard edge: Noctalia is a Wayland shell that can't run without a compositor.
 dependencies:
   - role: hyprland

@@ -1,6 +1,4 @@
 ---
-# Placeholder role. Applying it is currently a no-op — replace this with real
-# tasks (packages, links, services, …) when you build the laptop slice.
 - name: TODO — implement the laptop role
   ansible.builtin.debug:
     msg: "role 'laptop' is a placeholder; nothing applied yet"

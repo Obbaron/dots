@@ -1,7 +1,4 @@
 ---
-# The compositor layer (needs Hyprland >= 0.55 for the Lua config API — Arch
-# rolling provides this). The portal IMPLEMENTATION is compositor-specific and
-# lives here; the base xdg-desktop-portal is in the wayland substrate.
 hyprland_packages:
   - hyprland
   - xdg-desktop-portal-hyprland

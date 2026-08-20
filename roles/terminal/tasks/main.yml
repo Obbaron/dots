@@ -12,7 +12,6 @@
     state: present
   become: true
 
-# starship: installed from the official script rather than a package.
 - name: Detect an existing starship
   ansible.builtin.shell: command -v starship
   register: starship_present

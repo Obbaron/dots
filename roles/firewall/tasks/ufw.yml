@@ -1,5 +1,4 @@
 ---
-# ufw defaults to ALLOW incoming, so default-deny must be set explicitly.
 - name: Install ufw
   ansible.builtin.package:
     name: ufw
@@ -17,7 +16,7 @@
   ansible.builtin.command: ufw status verbose
   register: ufw_status
   changed_when: false
-  check_mode: false          # still run under --check so the guard is accurate
+  check_mode: false          # still run under --check so the deny guard is accurate
   become: true
 
 - name: Set default-deny for incoming traffic

@@ -1,9 +1,7 @@
 ---
-# ansible-pull's default entry playbook. Connection is local; ansible-pull
-# limits the run to the current host, so `hosts: all` resolves to just this box.
 - name: Configure this machine
   hosts: all
-  gather_facts: true          # needed for ansible_facts['distribution'] / os_family
+  gather_facts: true
 
   pre_tasks:
     - name: Fail loudly if this host has no valid profile

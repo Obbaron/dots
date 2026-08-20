@@ -1,7 +1,4 @@
 ---
-# On Fedora Server firewalld ships enabled with a default zone that already
-# rejects unsolicited incoming traffic, so the backend's whole job is to ensure
-# it's installed and running — no explicit deny rules ("use the default").
 - name: Install firewalld
   ansible.builtin.package:
     name: firewalld

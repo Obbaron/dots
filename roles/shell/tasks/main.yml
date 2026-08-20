@@ -16,7 +16,6 @@
   when: item.stat.exists and not item.stat.islnk
   register: shell_bak
 
-# Refuse BEFORE moving anything, so two versions are never lost.
 - name: Refuse to clobber an existing .bak
   ansible.builtin.assert:
     that:

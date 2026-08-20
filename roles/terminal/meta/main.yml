@@ -1,4 +1,3 @@
 ---
-# Hard edge: the starship install target ~/.local/bin is created by base.
 dependencies:
   - role: base
