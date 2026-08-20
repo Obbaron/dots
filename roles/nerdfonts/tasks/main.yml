@@ -27,7 +27,9 @@
   loop: "{{ nerd_font_stats.results }}"
   loop_control:
     label: "{{ item.item }}"
-  when: not item.stat.exists
+  when:
+    - not item.stat.exists
+    - not ansible_check_mode
 
 - name: Download and extract missing Nerd Fonts
   ansible.builtin.unarchive:
@@ -37,8 +39,19 @@
   loop: "{{ nerd_font_stats.results }}"
   loop_control:
     label: "{{ item.item }}"
-  when: not item.stat.exists
+  when:
+    - not item.stat.exists
+    - not ansible_check_mode          # network download+extract can't be dry-run
   register: nerd_font_install
+
+- name: Note skipped font install under --check
+  ansible.builtin.debug:
+    msg: >-
+      check mode: skipped Nerd Font download/extract (network op); a real run
+      installs any missing of: {{ nerd_fonts | join(', ') }}
+  when:
+    - ansible_check_mode
+    - nerd_font_stats.results | selectattr('stat.exists', 'equalto', false) | list | length > 0
 
 - name: Look for fc-cache (absent on headless boxes)
   ansible.builtin.shell: command -v fc-cache
